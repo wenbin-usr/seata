@@ -368,4 +368,56 @@ engine.compensate(xid)
 
 ---
 
+## 15. 附录：源码级实现补充
+
+> 见 [SEATA_MODE_SOURCE_DEEP_DIVE.md](./SEATA_MODE_SOURCE_DEEP_DIVE.md) 第 6 节。
+
+### 15.1 启动与 xid 绑定
+
+```text
+DbAndReportTcStateLogStore.recordStateMachineStarted()
+  → sagaTransactionalTemplate.beginTransaction()  // GlobalBegin
+  → machineInstance.setId(globalTransaction.getXid())
+  → RootContext.bind(xid); bindBranchType(SAGA)
+```
+
+子状态机（`parentId != null`）不单独 begin，共用父 xid。
+
+### 15.2 结束：globalReport 源码映射
+
+`reportTransactionFinished()` 根据 `ExecutionStatus` / `compensationStatus` 映射 `GlobalStatus`，再：
+
+```java
+sagaTransactionalTemplate.reportTransaction(globalTransaction, globalStatus);
+// → DefaultGlobalTransaction.globalReport()
+// → GlobalReportRequest → SagaCore.doGlobalReport()
+```
+
+**通常不走** `DefaultTransactionManager.commit()` 完成 Saga 主流程。
+
+### 15.3 SagaCore 与 DefaultCore 分叉
+
+```java
+// DefaultCore.doGlobalCommit
+if (globalSession.isSaga()) {
+    success = getCore(BranchType.SAGA).doGlobalCommit(globalSession, retrying);
+} else {
+    // 按 BranchSession 循环 branchCommit
+}
+```
+
+`SagaCore.branchCommitSend` 按 `applicationId#transactionServiceGroup` 找 **唯一** RM Channel，而非 per-state 循环。
+
+### 15.4 RM 二阶段
+
+```java
+// SagaResourceManager.branchCommit
+engine.forward(xid, null);   // 续跑未完成状态
+
+// branchRollback
+engine.compensate(xid);      // 补偿链
+```
+
+---
+
 *基于 Apache Seata 源码整理。*

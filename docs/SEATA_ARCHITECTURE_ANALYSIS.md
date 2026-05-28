@@ -24,6 +24,9 @@
 15. [技术亮点与设计亮点](#15-技术亮点与设计亮点)
 16. [关键类索引](#16-关键类索引)
 
+**各模式源码级深度剖析**（调用栈、分支条件、核心方法）：[SEATA_MODE_SOURCE_DEEP_DIVE.md](./SEATA_MODE_SOURCE_DEEP_DIVE.md)  
+**分模式文档**： [AT](./SEATA_MODE_AT.md) | [TCC](./SEATA_MODE_TCC.md) | [XA](./SEATA_MODE_XA.md) | [Saga](./SEATA_MODE_SAGA.md)
+
 ---
 
 ## 1. 项目定位与背景

@@ -282,4 +282,43 @@ connection.setAutoCommit(false);
 
 ---
 
+## 14. 附录：源码级实现补充
+
+> 见 [SEATA_MODE_SOURCE_DEEP_DIVE.md](./SEATA_MODE_SOURCE_DEEP_DIVE.md) 第 5 节。
+
+### 14.1 一阶段源码锚点（ConnectionProxyXA.setAutoCommit）
+
+```java
+// autoCommit: true → false 且非只读
+branchId = DefaultResourceManager.get().branchRegister(BranchType.XA, resourceId, xid, null, null);
+xaBranchXid = XAXidBuilder.build(xid, branchId);
+keepIfNecessary();   // MySQL 老版本等：连接进 keeper
+xaResource.start(xaBranchXid, TMNOFLAGS);
+xaActive = true;
+```
+
+**注意**：XA 在 **开启本地事务** 时注册；AT 在 **commit 前** 注册。
+
+### 14.2 prepare 触发点
+
+`close()` / 提交路径 → `end(TMSUCCESS)` → `xaResource.prepare(xaBranchXid)` → `reportStatusToTC(PhaseOne_Done)`。
+
+失败：`end(TMFAIL)` + `xaRollback` + `PhaseOne_Failed`。
+
+### 14.3 二阶段与 XAER_NOTA
+
+`ResourceManagerXA.finishBranch()` 从 `keeper` 取 `ConnectionProxyXA`，调用 `xaCommit`/`xaRollback`。  
+捕获 `XAER_NOTA` 返回 `PhaseTwo_CommitFailed_XAER_NOTA_Retryable`，TC `DefaultCore.isXaerNotaTimeout()` 超时后视为已提交并 `removeBranch`。
+
+### 14.4 DefaultCore 只读优化
+
+```java
+if (currentStatus == BranchStatus.PhaseOne_RDONLY && branchSession.getBranchType() == BranchType.XA) {
+    SessionHelper.removeBranch(globalSession, branchSession, !retrying);
+    return CONTINUE;  // 不再发 branchCommit RPC
+}
+```
+
+---
+
 *基于 Apache Seata 源码整理。*

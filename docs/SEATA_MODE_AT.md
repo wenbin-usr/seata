@@ -405,4 +405,57 @@ AsyncWorker.branchCommit(xid, branchId, resourceId)
 
 ---
 
+## 15. 附录：源码级实现补充
+
+> 完整四模式对照见 [SEATA_MODE_SOURCE_DEEP_DIVE.md](./SEATA_MODE_SOURCE_DEEP_DIVE.md) 第 3 节。
+
+### 15.1 调用栈（一阶段 commit）
+
+```text
+StatementProxy.execute*()
+  → ExecuteTemplate.execute()          // 非 AT 且无 GlobalLock 则直通
+  → *Executor.execute()
+       → BaseTransactionalExecutor.prepareUndoLog()
+  → ConnectionProxy.commit()
+       → doCommit()
+       → processGlobalTransactionCommit()
+            → register() → branchRegister(AT, lockKeys)
+            → AbstractUndoLogManager.flushUndoLogs()
+            → targetConnection.commit()
+            → report(PhaseOne_Done) [可选]
+```
+
+### 15.2 关键分支条件
+
+| 位置 | 条件 | 结果 |
+|------|------|------|
+| `ExecuteTemplate` | `!requireGlobalLock() && branchType!=AT` | 不拦截 |
+| `register()` | `!hasUndoLog() \|\| !hasLockKey()` | 不注册分支 |
+| `processGlobalTransactionCommit` | 注册抛 `LockKeyConflict` | `recognizeLockKeyConflictException` 重试或失败 |
+| `AbstractUndoLogManager.undo` | `log_status != Normal` | 幂等 return |
+| `undo` 无记录 | `exists==false` | `insertUndoLogWithGlobalFinished` |
+
+### 15.3 TC 注册与加锁源码锚点
+
+```java
+// AbstractCore.branchRegister — 所有模式入口
+branchSessionLock(globalSession, branchSession);  // ATCore 内真正 acquireLock
+globalSession.addBranch(branchSession);
+
+// ATCore — 解析 applicationData 后
+branchSession.lock(autoCommit, skipCheckLock);
+```
+
+### 15.4 二阶段删除 undo
+
+```java
+// DataSourceManager.branchCommit → AsyncWorker
+public BranchStatus branchCommit(...) {
+    return addToCommitQueue(xid, branchId, resourceId);  // 立即 PhaseTwo_Committed
+}
+// 后台线程 batchDeleteUndoLog
+```
+
+---
+
 *基于 Apache Seata 源码整理；行为以实际版本配置为准。*

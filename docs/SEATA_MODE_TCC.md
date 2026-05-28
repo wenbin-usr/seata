@@ -274,4 +274,47 @@ Try 抛异常 → 全局事务回滚 → TC 发 Cancel；若 Try 未注册分支
 
 ---
 
+## 12. 附录：源码级实现补充
+
+> 见 [SEATA_MODE_SOURCE_DEEP_DIVE.md](./SEATA_MODE_SOURCE_DEEP_DIVE.md) 第 4 节。
+
+### 12.1 Try 阶段完整调用栈
+
+```text
+TccActionInterceptorHandler.invoke()
+  → RootContext.bindBranchType(TCC)
+  → ActionInterceptorHandler.proceed()
+       → doTxActionLogStore()                    // Try 之前
+            → branchRegister(TCC, actionName, applicationData, lockKeys=null)
+       → [useCommonFence ? prepareFence : targetCallback.execute()]
+       → finally: BusinessActionContextUtil.reportContext()
+```
+
+### 12.2 applicationData JSON 结构（源码构造）
+
+`doTxActionLogStore()` 将下列内容放入 `Constants.TX_ACTION_CONTEXT`：
+
+- `PREPARE_METHOD` / `COMMIT_METHOD` / `ROLLBACK_METHOD` / `ACTION_NAME`
+- `@BusinessActionContextParameter` 解析出的业务参数
+- `HOST_NAME`、`ACTION_START_TIME`
+- `USE_COMMON_FENCE`（若启用）
+
+整包 `JsonUtil.toJSONString` 后作为 `BranchRegisterRequest.applicationData` 发往 TC。
+
+### 12.3 Confirm 反射（TCCResourceManager）
+
+```java
+BusinessActionContext ctx = BusinessActionContextUtil.getBusinessActionContext(
+    xid, branchId, resourceId, applicationData);
+Object[] args = getTwoPhaseMethodParams(tccResource.getPhaseTwoCommitKeys(), ctx, commitMethod);
+Object ret = commitMethod.invoke(tccResource.getTargetBean(), args);
+// ret 为 Boolean 或 TwoPhaseResult → 映射 BranchStatus
+```
+
+### 12.4 与 AT 在 TC 上的差异
+
+同一 `AbstractCore.branchRegister()`，但 `TccCore` **不重写** `branchSessionLock`，TC **不解析 lockKeys**，无 `LockKeyConflict` 路径。
+
+---
+
 *基于 Apache Seata 源码整理。*
