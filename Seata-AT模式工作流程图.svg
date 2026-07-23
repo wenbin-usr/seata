@@ -201,7 +201,7 @@
   <text x="700" y="203" text-anchor="middle" font-size="9.5" font-weight="700" fill="#1d4ed8">① begin</text>
 
   <!-- ②->③ 返回 XID -->
-  <path d="M 1230 240 L 1230 254 L 190 254 L 190 262" fill="none" stroke="#6366f1" stroke-width="2" stroke-dasharray="6 3" marker-end="url(#arrPurple)"/>
+  <path d="M 1230 240 L 1230 254 L 48 254 L 48 293 L 60 293" fill="none" stroke="#6366f1" stroke-width="2" stroke-dasharray="6 3" marker-end="url(#arrPurple)"/>
   <rect x="640" y="242" width="140" height="10" rx="4" fill="#e0e7ff" stroke="#a5b4fc" stroke-width="0.7"/>
   <text x="710" y="250" text-anchor="middle" font-size="9" font-weight="700" fill="#4338ca">② 返回 XID</text>
 
