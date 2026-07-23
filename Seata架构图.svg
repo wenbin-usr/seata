@@ -1,0 +1,383 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg xmlns="http://www.w3.org/2000/svg" width="1440" height="1140" viewBox="0 0 1440 1140" font-family="'Microsoft YaHei','PingFang SC','Segoe UI',Arial,sans-serif">
+  <!-- ============ DEFS ============ -->
+  <defs>
+    <linearGradient id="bgGrad" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0%" stop-color="#f6f9fc"/>
+      <stop offset="55%" stop-color="#eef2f9"/>
+      <stop offset="100%" stop-color="#e6ecf5"/>
+    </linearGradient>
+    <linearGradient id="titleBar" x1="0" y1="0" x2="1" y2="0">
+      <stop offset="0%" stop-color="#4f46e5"/>
+      <stop offset="100%" stop-color="#0ea5e9"/>
+    </linearGradient>
+
+    <linearGradient id="g-tm" x1="0" y1="0" x2="1" y2="0"><stop offset="0%" stop-color="#2563eb"/><stop offset="100%" stop-color="#60a5fa"/></linearGradient>
+    <linearGradient id="g-at" x1="0" y1="0" x2="1" y2="0"><stop offset="0%" stop-color="#0891b2"/><stop offset="100%" stop-color="#22d3ee"/></linearGradient>
+    <linearGradient id="g-tcc" x1="0" y1="0" x2="1" y2="0"><stop offset="0%" stop-color="#7c3aed"/><stop offset="100%" stop-color="#a78bfa"/></linearGradient>
+    <linearGradient id="g-xa" x1="0" y1="0" x2="1" y2="0"><stop offset="0%" stop-color="#059669"/><stop offset="100%" stop-color="#34d399"/></linearGradient>
+    <linearGradient id="g-saga" x1="0" y1="0" x2="1" y2="0"><stop offset="0%" stop-color="#d97706"/><stop offset="100%" stop-color="#fbbf24"/></linearGradient>
+    <linearGradient id="g-tc" x1="0" y1="0" x2="1" y2="0"><stop offset="0%" stop-color="#4f46e5"/><stop offset="100%" stop-color="#6366f1"/></linearGradient>
+    <linearGradient id="g-ns" x1="0" y1="0" x2="1" y2="0"><stop offset="0%" stop-color="#db2777"/><stop offset="100%" stop-color="#f472b6"/></linearGradient>
+    <linearGradient id="g-st" x1="0" y1="0" x2="1" y2="0"><stop offset="0%" stop-color="#475569"/><stop offset="100%" stop-color="#94a3b8"/></linearGradient>
+
+    <filter id="shadow" x="-10%" y="-10%" width="120%" height="125%">
+      <feGaussianBlur in="SourceAlpha" stdDeviation="3.2"/>
+      <feOffset dx="0" dy="3"/>
+      <feComponentTransfer><feFuncA type="linear" slope="0.18"/></feComponentTransfer>
+      <feMerge><feMergeNode/><feMergeNode in="SourceGraphic"/></feMerge>
+    </filter>
+    <filter id="softShadow" x="-10%" y="-10%" width="120%" height="125%">
+      <feGaussianBlur in="SourceAlpha" stdDeviation="2"/>
+      <feOffset dx="0" dy="2"/>
+      <feComponentTransfer><feFuncA type="linear" slope="0.10"/></feComponentTransfer>
+      <feMerge><feMergeNode/><feMergeNode in="SourceGraphic"/></feMerge>
+    </filter>
+
+    <marker id="arr" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse">
+      <path d="M0,0 L10,5 L0,10 z" fill="#64748b"/>
+    </marker>
+    <marker id="arrBlue" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse">
+      <path d="M0,0 L10,5 L0,10 z" fill="#3b82f6"/>
+    </marker>
+    <marker id="arrPink" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse">
+      <path d="M0,0 L10,5 L0,10 z" fill="#db2777"/>
+    </marker>
+  </defs>
+
+  <!-- ============ 背景 ============ -->
+  <rect width="1440" height="1140" fill="url(#bgGrad)"/>
+  <circle cx="80" cy="80" r="2" fill="#cbd5e1" opacity="0.6"/>
+  <circle cx="1380" cy="120" r="2.5" fill="#cbd5e1" opacity="0.6"/>
+  <circle cx="1340" cy="1080" r="2" fill="#cbd5e1" opacity="0.6"/>
+  <circle cx="60" cy="1060" r="2.5" fill="#cbd5e1" opacity="0.6"/>
+
+  <!-- ============ 标题 ============ -->
+  <text x="720" y="48" text-anchor="middle" font-size="28" font-weight="700" fill="#0f172a">Seata 分布式事务整体架构</text>
+  <text x="720" y="74" text-anchor="middle" font-size="13" fill="#64748b" letter-spacing="2">Apache Seata · Distributed Transaction Architecture · 2.x</text>
+  <line x1="600" y1="88" x2="840" y2="88" stroke="url(#titleBar)" stroke-width="2.5" stroke-linecap="round"/>
+
+  <!-- ============ 业务应用层 容器 (105-410) ============ -->
+  <rect x="40" y="105" width="1360" height="305" rx="14" fill="#ffffff" stroke="#e2e8f0" stroke-width="1.2" filter="url(#softShadow)"/>
+  <rect x="40" y="105" width="6" height="305" rx="3" fill="url(#titleBar)"/>
+  <text x="62" y="135" font-size="14" font-weight="700" fill="#334155">业务应用层  Business Application</text>
+  <text x="62" y="153" font-size="11" fill="#94a3b8">Client Side · 集成于业务系统，通过 AOP / 注解 / API 接入</text>
+
+  <!-- ===== TM 模块 (65-305, 170-395) ===== -->
+  <g>
+    <rect x="65" y="170" width="240" height="225" rx="10" fill="#ffffff" stroke="#bfdbfe" stroke-width="1.2" filter="url(#shadow)"/>
+    <rect x="65" y="170" width="240" height="32" rx="10" fill="url(#g-tm)"/>
+    <rect x="65" y="192" width="240" height="10" fill="url(#g-tm)"/>
+    <text x="185" y="191" text-anchor="middle" font-size="14" font-weight="700" fill="#ffffff">TM  全局事务管理器</text>
+    <circle cx="87" cy="186" r="7" fill="none" stroke="#ffffff" stroke-width="1.6"/>
+    <path d="M83 186 L86 189 L91 183" fill="none" stroke="#ffffff" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/>
+    <text x="185" y="226" text-anchor="middle" font-size="10.5" fill="#64748b">@GlobalTransactional (AOP 入口)</text>
+    <text x="185" y="244" text-anchor="middle" font-size="10.5" fill="#64748b">GlobalTransactionScanner</text>
+    <text x="185" y="262" text-anchor="middle" font-size="10.5" fill="#64748b">DefaultGlobalTransaction</text>
+    <text x="185" y="280" text-anchor="middle" font-size="10.5" fill="#64748b">TransactionManager</text>
+    <rect x="83" y="296" width="60" height="22" rx="5" fill="#dbeafe" stroke="#93c5fd" stroke-width="0.8"/>
+    <text x="113" y="311" text-anchor="middle" font-size="10.5" font-weight="600" fill="#1d4ed8">begin</text>
+    <rect x="149" y="296" width="62" height="22" rx="5" fill="#dbeafe" stroke="#93c5fd" stroke-width="0.8"/>
+    <text x="180" y="311" text-anchor="middle" font-size="10.5" font-weight="600" fill="#1d4ed8">commit</text>
+    <rect x="217" y="296" width="68" height="22" rx="5" fill="#dbeafe" stroke="#93c5fd" stroke-width="0.8"/>
+    <text x="251" y="311" text-anchor="middle" font-size="10.5" font-weight="600" fill="#1d4ed8">rollback</text>
+    <text x="185" y="345" text-anchor="middle" font-size="10" fill="#475569">全局事务开启/提交/回滚</text>
+    <text x="185" y="362" text-anchor="middle" font-size="10" fill="#475569">维护 XID 全局事务上下文</text>
+    <text x="185" y="379" text-anchor="middle" font-size="9.5" fill="#94a3b8">TransactionManager 客户端</text>
+  </g>
+
+  <!-- ===== RM 模块容器 (325-1375, 170-395) ===== -->
+  <rect x="325" y="170" width="1050" height="225" rx="10" fill="#f8fafc" stroke="#e2e8f0" stroke-width="1.2" stroke-dasharray="4 3"/>
+  <text x="340" y="190" font-size="13" font-weight="700" fill="#334155">RM  资源管理器（四种事务模式）</text>
+  <text x="560" y="190" font-size="10.5" fill="#94a3b8">Resource Manager · 分支事务注册 / 资源管理 / 二阶段执行</text>
+
+  <!-- ===== AT 模式 (340-590, 205-385) ===== -->
+  <g>
+    <rect x="340" y="205" width="250" height="180" rx="9" fill="#ffffff" stroke="#a5f3fc" stroke-width="1.1" filter="url(#shadow)"/>
+    <rect x="340" y="205" width="250" height="26" rx="9" fill="url(#g-at)"/>
+    <rect x="340" y="221" width="250" height="10" fill="url(#g-at)"/>
+    <text x="465" y="223" text-anchor="middle" font-size="13" font-weight="700" fill="#ffffff">AT  模式</text>
+    <text x="352" y="251" font-size="10.5" fill="#475569">▸ ConnectionProxy</text>
+    <text x="352" y="267" font-size="10.5" fill="#475569">▸ ExecuteTemplate (SQL 解析)</text>
+    <text x="352" y="283" font-size="10.5" fill="#475569">▸ UndoLogManager (undo_log)</text>
+    <text x="352" y="299" font-size="10.5" fill="#475569">▸ LockManagerImpl (全局锁)</text>
+    <rect x="352" y="309" width="226" height="40" rx="5" fill="#ecfeff" stroke="#67e8f9" stroke-width="0.7"/>
+    <text x="465" y="325" text-anchor="middle" font-size="9.5" fill="#0e7490">一阶段：业务SQL + undo_log 提交</text>
+    <text x="465" y="340" text-anchor="middle" font-size="9.5" fill="#0e7490">二阶段：异步删log / 反向回滚</text>
+    <rect x="352" y="357" width="226" height="22" rx="4" fill="#cffafe" stroke="#67e8f9" stroke-width="0.7"/>
+    <text x="465" y="372" text-anchor="middle" font-size="9.5" font-weight="600" fill="#0e7490">undo_log 表（业务库）</text>
+  </g>
+
+  <!-- ===== TCC 模式 (600-850, 205-385) ===== -->
+  <g>
+    <rect x="600" y="205" width="250" height="180" rx="9" fill="#ffffff" stroke="#ddd6fe" stroke-width="1.1" filter="url(#shadow)"/>
+    <rect x="600" y="205" width="250" height="26" rx="9" fill="url(#g-tcc)"/>
+    <rect x="600" y="221" width="250" height="10" fill="url(#g-tcc)"/>
+    <text x="725" y="223" text-anchor="middle" font-size="13" font-weight="700" fill="#ffffff">TCC  模式</text>
+    <text x="612" y="251" font-size="10.5" fill="#475569">▸ @TwoPhaseBusinessAction</text>
+    <text x="612" y="267" font-size="10.5" fill="#475569">▸ TccActionInterceptorHandler</text>
+    <text x="612" y="283" font-size="10.5" fill="#475569">▸ TCCResourceManager</text>
+    <text x="612" y="299" font-size="10.5" fill="#475569">▸ SpringFenceHandler (围栏)</text>
+    <rect x="612" y="309" width="226" height="40" rx="5" fill="#f5f3ff" stroke="#c4b5fd" stroke-width="0.7"/>
+    <text x="725" y="325" text-anchor="middle" font-size="9.5" fill="#6d28d9">Try / Confirm / Cancel 三阶段</text>
+    <text x="725" y="340" text-anchor="middle" font-size="9.5" fill="#6d28d9">围栏：幂等/空回滚/防悬挂</text>
+    <rect x="612" y="357" width="226" height="22" rx="4" fill="#ede9fe" stroke="#c4b5fd" stroke-width="0.7"/>
+    <text x="725" y="372" text-anchor="middle" font-size="9.5" font-weight="600" fill="#6d28d9">tcc_fence_log 表（业务库）</text>
+  </g>
+
+  <!-- ===== XA 模式 (860-1110, 205-385) ===== -->
+  <g>
+    <rect x="860" y="205" width="250" height="180" rx="9" fill="#ffffff" stroke="#bbf7d0" stroke-width="1.1" filter="url(#shadow)"/>
+    <rect x="860" y="205" width="250" height="26" rx="9" fill="url(#g-xa)"/>
+    <rect x="860" y="221" width="250" height="10" fill="url(#g-xa)"/>
+    <text x="985" y="223" text-anchor="middle" font-size="13" font-weight="700" fill="#ffffff">XA  模式</text>
+    <text x="872" y="251" font-size="10.5" fill="#475569">▸ DataSourceProxyXA</text>
+    <text x="872" y="267" font-size="10.5" fill="#475569">▸ ConnectionProxyXA</text>
+    <text x="872" y="283" font-size="10.5" fill="#475569">▸ ResourceManagerXA</text>
+    <text x="872" y="299" font-size="10.5" fill="#475569">▸ XA Start/End/Prepare</text>
+    <rect x="872" y="309" width="226" height="40" rx="5" fill="#f0fdf4" stroke="#86efac" stroke-width="0.7"/>
+    <text x="985" y="325" text-anchor="middle" font-size="9.5" fill="#047857">一阶段：XA 长事务挂起不提交</text>
+    <text x="985" y="340" text-anchor="middle" font-size="9.5" fill="#047857">二阶段：XA Commit / Rollback</text>
+    <rect x="872" y="357" width="226" height="22" rx="4" fill="#d1fae5" stroke="#86efac" stroke-width="0.7"/>
+    <text x="985" y="372" text-anchor="middle" font-size="9.5" font-weight="600" fill="#047857">依赖数据库 XA 协议</text>
+  </g>
+
+  <!-- ===== SAGA 模式 (1120-1370, 205-385) ===== -->
+  <g>
+    <rect x="1120" y="205" width="250" height="180" rx="9" fill="#ffffff" stroke="#fde68a" stroke-width="1.1" filter="url(#shadow)"/>
+    <rect x="1120" y="205" width="250" height="26" rx="9" fill="url(#g-saga)"/>
+    <rect x="1120" y="221" width="250" height="10" fill="url(#g-saga)"/>
+    <text x="1245" y="223" text-anchor="middle" font-size="13" font-weight="700" fill="#ffffff">SAGA  模式</text>
+    <text x="1132" y="251" font-size="10.5" fill="#475569">▸ StateMachineEngine</text>
+    <text x="1132" y="267" font-size="10.5" fill="#475569">▸ ServiceTask / Choice</text>
+    <text x="1132" y="283" font-size="10.5" fill="#475569">▸ CompensationTrigger</text>
+    <text x="1132" y="299" font-size="10.5" fill="#475569">▸ CompensationHolder</text>
+    <rect x="1132" y="309" width="226" height="40" rx="5" fill="#fffbeb" stroke="#fcd34d" stroke-width="0.7"/>
+    <text x="1245" y="325" text-anchor="middle" font-size="9.5" fill="#b45309">状态机引擎驱动编排执行</text>
+    <text x="1245" y="340" text-anchor="middle" font-size="9.5" fill="#b45309">失败反向遍历补偿</text>
+    <rect x="1132" y="357" width="226" height="22" rx="4" fill="#fef3c7" stroke="#fcd34d" stroke-width="0.7"/>
+    <text x="1245" y="372" text-anchor="middle" font-size="9.5" font-weight="600" fill="#b45309">JSON 状态机定义</text>
+  </g>
+
+  <!-- ============ 间隙1 连接线标签 (410-455) ============ -->
+  <!-- TM -> TC -->
+  <path d="M 185 395 C 185 422, 177 428, 177 455" fill="none" stroke="#3b82f6" stroke-width="2" stroke-dasharray="6 3" marker-end="url(#arrBlue)"/>
+  <rect x="100" y="418" width="170" height="22" rx="4" fill="#dbeafe" stroke="#93c5fd" stroke-width="0.7"/>
+  <text x="185" y="433" text-anchor="middle" font-size="9.5" font-weight="600" fill="#1d4ed8">全局事务 begin/commit/rollback</text>
+
+  <!-- RM -> TC -->
+  <path d="M 850 395 L 850 415 Q 850 420 845 420 L 550 420 Q 545 420 545 425 L 545 455" fill="none" stroke="#64748b" stroke-width="2" stroke-dasharray="6 3" marker-end="url(#arr)"/>
+  <rect x="540" y="425" width="200" height="22" rx="4" fill="#f1f5f9" stroke="#cbd5e1" stroke-width="0.7"/>
+  <text x="640" y="440" text-anchor="middle" font-size="9.5" font-weight="600" fill="#475569">分支注册 / 状态上报 / 锁申请</text>
+
+  <!-- 应用 -> NamingServer -->
+  <path d="M 1245 385 C 1245 422, 1235 428, 1235 455" fill="none" stroke="#db2777" stroke-width="1.8" stroke-dasharray="6 3" marker-end="url(#arrPink)"/>
+  <rect x="1180" y="418" width="120" height="22" rx="4" fill="#fce7f3" stroke="#f9a8d4" stroke-width="0.7"/>
+  <text x="1240" y="433" text-anchor="middle" font-size="9.5" font-weight="600" fill="#be185d">vGroup 路由 / 发现</text>
+
+  <!-- ============ TC 容器 (455-720) ============ -->
+  <rect x="40" y="455" width="1010" height="265" rx="14" fill="#ffffff" stroke="#e2e8f0" stroke-width="1.2" filter="url(#softShadow)"/>
+  <rect x="40" y="455" width="6" height="265" rx="3" fill="url(#g-tc)"/>
+  <text x="62" y="485" font-size="14" font-weight="700" fill="#334155">TC  事务协调器  Transaction Coordinator</text>
+  <text x="62" y="503" font-size="11" fill="#94a3b8">Server Side · 全局事务编排 / 分支调度 / 锁管理 / 状态持久化</text>
+
+  <!-- DefaultCoordinator (62-292, 520-655) -->
+  <g>
+    <rect x="62" y="520" width="230" height="135" rx="9" fill="#ffffff" stroke="#c7d2fe" stroke-width="1.1" filter="url(#shadow)"/>
+    <rect x="62" y="520" width="230" height="24" rx="9" fill="url(#g-tc)"/>
+    <rect x="62" y="536" width="230" height="8" fill="url(#g-tc)"/>
+    <text x="177" y="537" text-anchor="middle" font-size="12" font-weight="700" fill="#ffffff">DefaultCoordinator</text>
+    <text x="74" y="564" font-size="10" fill="#475569">doGlobalBegin / Commit / Rollback</text>
+    <text x="74" y="580" font-size="10" fill="#475569">doBranchRegister / Report</text>
+    <text x="74" y="596" font-size="10" fill="#475569">timeoutCheck 超时检查</text>
+    <text x="74" y="612" font-size="10" fill="#475569">handleRetryCommitting/Rollback</text>
+    <text x="74" y="628" font-size="10" fill="#475569">定时任务驱动重试</text>
+    <text x="74" y="645" font-size="9.5" fill="#6366f1" font-weight="600">全局事务调度核心</text>
+  </g>
+
+  <!-- DefaultCore (308-538, 520-655) -->
+  <g>
+    <rect x="308" y="520" width="230" height="135" rx="9" fill="#ffffff" stroke="#c7d2fe" stroke-width="1.1" filter="url(#shadow)"/>
+    <rect x="308" y="520" width="230" height="24" rx="9" fill="url(#g-tc)"/>
+    <rect x="308" y="536" width="230" height="8" fill="url(#g-tc)"/>
+    <text x="423" y="537" text-anchor="middle" font-size="12" font-weight="700" fill="#ffffff">DefaultCore / AbstractCore</text>
+    <text x="320" y="564" font-size="10" fill="#475569">branchCommit / branchRollback</text>
+    <text x="320" y="580" font-size="10" fill="#475569">Core 模式路由</text>
+    <text x="320" y="596" font-size="10" fill="#475569">doGlobalCommit / Rollback</text>
+    <text x="320" y="612" font-size="10" fill="#475569">AT / TCC / XA / SAGA 分发</text>
+    <text x="320" y="628" font-size="10" fill="#475569">全局提交/回滚统一入口</text>
+    <text x="320" y="645" font-size="9.5" fill="#6366f1" font-weight="600">分支事务执行引擎</text>
+  </g>
+
+  <!-- SessionHolder (554-784, 520-655) -->
+  <g>
+    <rect x="554" y="520" width="230" height="135" rx="9" fill="#ffffff" stroke="#c7d2fe" stroke-width="1.1" filter="url(#shadow)"/>
+    <rect x="554" y="520" width="230" height="24" rx="9" fill="url(#g-tc)"/>
+    <rect x="554" y="536" width="230" height="8" fill="url(#g-tc)"/>
+    <text x="669" y="537" text-anchor="middle" font-size="12" font-weight="700" fill="#ffffff">SessionHolder</text>
+    <text x="566" y="564" font-size="10" fill="#475569">GlobalSession 全局会话</text>
+    <text x="566" y="580" font-size="10" fill="#475569">BranchSession 分支会话</text>
+    <text x="566" y="596" font-size="10" fill="#475569">ROOT / ASYNC_COMMITTING</text>
+    <text x="566" y="612" font-size="10" fill="#475569">SessionManager 存储抽象</text>
+    <text x="566" y="628" font-size="10" fill="#475569">会话生命周期管理</text>
+    <text x="566" y="645" font-size="9.5" fill="#6366f1" font-weight="600">事务会话与状态</text>
+  </g>
+
+  <!-- LockManager (800-1030, 520-655) -->
+  <g>
+    <rect x="800" y="520" width="230" height="135" rx="9" fill="#ffffff" stroke="#c7d2fe" stroke-width="1.1" filter="url(#shadow)"/>
+    <rect x="800" y="520" width="230" height="24" rx="9" fill="url(#g-tc)"/>
+    <rect x="800" y="536" width="230" height="8" fill="url(#g-tc)"/>
+    <text x="915" y="537" text-anchor="middle" font-size="12" font-weight="700" fill="#ffffff">LockManager</text>
+    <text x="812" y="564" font-size="10" fill="#475569">acquireLock 全局锁获取</text>
+    <text x="812" y="580" font-size="10" fill="#475569">releaseLock 锁释放</text>
+    <text x="812" y="596" font-size="10" fill="#475569">isLockable 锁竞争检测</text>
+    <text x="812" y="612" font-size="10" fill="#475569">AT 全局锁防脏写</text>
+    <text x="812" y="628" font-size="10" fill="#475569">行级锁粒度控制</text>
+    <text x="812" y="645" font-size="9.5" fill="#6366f1" font-weight="600">全局锁管理</text>
+  </g>
+
+  <!-- RPC 协议条 (62-1030, 665-705) -->
+  <rect x="62" y="665" width="968" height="40" rx="8" fill="#f1f5f9" stroke="#cbd5e1" stroke-width="1"/>
+  <text x="80" y="689" font-size="11" font-weight="700" fill="#475569">RPC / 协议层</text>
+  <text x="180" y="689" font-size="10.5" fill="#64748b">Netty + 自定义协议编解码  ·  Request/Response 同步异步  ·  心跳保活  ·  注册中心对接</text>
+
+  <!-- ============ NamingServer (1070-1400, 455-720) ============ -->
+  <g>
+    <rect x="1070" y="455" width="330" height="265" rx="14" fill="#ffffff" stroke="#fbcfe8" stroke-width="1.2" filter="url(#softShadow)"/>
+    <rect x="1070" y="455" width="6" height="265" rx="3" fill="url(#g-ns)"/>
+    <text x="1092" y="485" font-size="14" font-weight="700" fill="#334155">NamingServer  命名服务</text>
+    <text x="1092" y="503" font-size="11" fill="#94a3b8">独立模块 · 服务发现与路由 · 对接 TC</text>
+
+    <rect x="1090" y="520" width="290" height="58" rx="7" fill="#fdf2f8" stroke="#f9a8d4" stroke-width="0.9"/>
+    <text x="1104" y="540" font-size="10.5" font-weight="600" fill="#be185d">▸ 服务注册 / 发现</text>
+    <text x="1104" y="556" font-size="9.5" fill="#9d174d">TC 节点上线注册</text>
+    <text x="1104" y="570" font-size="9.5" fill="#9d174d">客户端发现可用 TC</text>
+
+    <rect x="1090" y="586" width="290" height="58" rx="7" fill="#fdf2f8" stroke="#f9a8d4" stroke-width="0.9"/>
+    <text x="1104" y="606" font-size="10.5" font-weight="600" fill="#be185d">▸ TC 集群路由</text>
+    <text x="1104" y="622" font-size="9.5" fill="#9d174d">按命名空间 / 分组分配</text>
+    <text x="1104" y="636" font-size="9.5" fill="#9d174d">TC 实例负载均衡</text>
+
+    <rect x="1090" y="652" width="290" height="58" rx="7" fill="#fdf2f8" stroke="#f9a8d4" stroke-width="0.9"/>
+    <text x="1104" y="672" font-size="10.5" font-weight="600" fill="#be185d">▸ 命名空间 / 配置管理</text>
+    <text x="1104" y="688" font-size="9.5" fill="#9d174d">vGroup -> TC 映射推送</text>
+    <text x="1104" y="702" font-size="9.5" fill="#9d174d">多机房 / 多集群容灾</text>
+  </g>
+
+  <!-- NamingServer <-> TC 双向箭头 (间隙中) -->
+  <path d="M 1030 588 L 1070 588" fill="none" stroke="#db2777" stroke-width="2" marker-end="url(#arrPink)" marker-start="url(#arrPink)"/>
+
+  <!-- ============ 间隙2 连接线标签 (720-755) ============ -->
+  <!-- TC -> 存储 主线 -->
+  <path d="M 545 720 Q 545 725 550 725 L 715 725 Q 720 725 720 730 L 720 755" fill="none" stroke="#64748b" stroke-width="1.8" marker-end="url(#arr)"/>
+  <rect x="460" y="730" width="280" height="18" rx="4" fill="#f1f5f9" stroke="#cbd5e1" stroke-width="0.7"/>
+  <text x="600" y="742" text-anchor="middle" font-size="9.5" font-weight="600" fill="#475569">SessionManager 持久化（可插拔，四选一）</text>
+
+  <!-- ============ 存储层容器 (755-1065) ============ -->
+  <rect x="40" y="755" width="1360" height="310" rx="14" fill="#ffffff" stroke="#e2e8f0" stroke-width="1.2" filter="url(#softShadow)"/>
+  <rect x="40" y="755" width="6" height="310" rx="3" fill="url(#g-st)"/>
+  <text x="62" y="785" font-size="14" font-weight="700" fill="#334155">存储层  Storage Mode</text>
+  <text x="62" y="803" font-size="11" fill="#94a3b8">SessionManager 实现 · 会话 / 锁 / 分布式锁持久化 · 可插拔</text>
+
+  <!-- file (62-380, 820-1045) -->
+  <g>
+    <rect x="62" y="820" width="318" height="225" rx="10" fill="#ffffff" stroke="#cbd5e1" stroke-width="1.1" filter="url(#shadow)"/>
+    <rect x="62" y="820" width="318" height="28" rx="10" fill="url(#g-st)"/>
+    <rect x="62" y="838" width="318" height="10" fill="url(#g-st)"/>
+    <text x="221" y="839" text-anchor="middle" font-size="13" font-weight="700" fill="#ffffff">file  文件模式</text>
+    <text x="74" y="872" font-size="10.5" fill="#475569">▸ FileSessionManager</text>
+    <text x="74" y="890" font-size="10.5" fill="#475569">▸ 本地文件存储，单机模式</text>
+    <text x="74" y="908" font-size="10.5" fill="#475569">▸ 全量 + 增量快照</text>
+    <text x="74" y="926" font-size="10.5" fill="#475569">▸ 重启时重放恢复</text>
+    <rect x="74" y="942" width="294" height="88" rx="6" fill="#f8fafc" stroke="#e2e8f0" stroke-width="0.8"/>
+    <text x="221" y="962" text-anchor="middle" font-size="10" font-weight="600" fill="#334155">适用场景</text>
+    <text x="221" y="982" text-anchor="middle" font-size="9.5" fill="#64748b">开发测试 / 单机演示</text>
+    <text x="221" y="1000" text-anchor="middle" font-size="9.5" fill="#64748b">无需依赖外部存储</text>
+    <text x="221" y="1020" text-anchor="middle" font-size="9.5" fill="#94a3b8">data/ dir</text>
+  </g>
+
+  <!-- db (394-712, 820-1045) -->
+  <g>
+    <rect x="394" y="820" width="318" height="225" rx="10" fill="#ffffff" stroke="#cbd5e1" stroke-width="1.1" filter="url(#shadow)"/>
+    <rect x="394" y="820" width="318" height="28" rx="10" fill="url(#g-st)"/>
+    <rect x="394" y="838" width="318" height="10" fill="url(#g-st)"/>
+    <text x="553" y="839" text-anchor="middle" font-size="13" font-weight="700" fill="#ffffff">db  数据库模式</text>
+    <text x="406" y="872" font-size="10.5" fill="#475569">▸ DbSessionManager</text>
+    <text x="406" y="890" font-size="10.5" fill="#475569">▸ 关系型数据库持久化</text>
+    <text x="406" y="908" font-size="10.5" fill="#475569">▸ MySQL / PostgreSQL</text>
+    <text x="406" y="926" font-size="10.5" fill="#475569">▸ 事务保证一致性</text>
+    <rect x="406" y="942" width="294" height="88" rx="6" fill="#f8fafc" stroke="#e2e8f0" stroke-width="0.8"/>
+    <text x="553" y="962" text-anchor="middle" font-size="10" font-weight="600" fill="#334155">核心数据表</text>
+    <text x="553" y="982" text-anchor="middle" font-size="9.5" font-weight="600" fill="#1e40af">global_table · branch_table</text>
+    <text x="553" y="1000" text-anchor="middle" font-size="9.5" font-weight="600" fill="#1e40af">lock_table · distributed_lock</text>
+    <text x="553" y="1020" text-anchor="middle" font-size="9.5" fill="#94a3b8">生产推荐</text>
+  </g>
+
+  <!-- redis (726-1044, 820-1045) -->
+  <g>
+    <rect x="726" y="820" width="318" height="225" rx="10" fill="#ffffff" stroke="#cbd5e1" stroke-width="1.1" filter="url(#shadow)"/>
+    <rect x="726" y="820" width="318" height="28" rx="10" fill="url(#g-st)"/>
+    <rect x="726" y="838" width="318" height="10" fill="url(#g-st)"/>
+    <text x="885" y="839" text-anchor="middle" font-size="13" font-weight="700" fill="#ffffff">redis  缓存模式</text>
+    <text x="738" y="872" font-size="10.5" fill="#475569">▸ RedisSessionManager</text>
+    <text x="738" y="890" font-size="10.5" fill="#475569">▸ Lua 脚本原子操作</text>
+    <text x="738" y="908" font-size="10.5" fill="#475569">▸ 高性能内存存储</text>
+    <text x="738" y="926" font-size="10.5" fill="#475569">▸ 分布式锁 / 集群部署</text>
+    <rect x="738" y="942" width="294" height="88" rx="6" fill="#f8fafc" stroke="#e2e8f0" stroke-width="0.8"/>
+    <text x="885" y="962" text-anchor="middle" font-size="10" font-weight="600" fill="#334155">特性</text>
+    <text x="885" y="982" text-anchor="middle" font-size="9.5" fill="#64748b">吞吐高、延迟低</text>
+    <text x="885" y="1000" text-anchor="middle" font-size="9.5" fill="#64748b">需配合持久化策略</text>
+    <text x="885" y="1020" text-anchor="middle" font-size="9.5" fill="#94a3b8">高性能场景</text>
+  </g>
+
+  <!-- raft (1058-1376, 820-1045) -->
+  <g>
+    <rect x="1058" y="820" width="318" height="225" rx="10" fill="#ffffff" stroke="#cbd5e1" stroke-width="1.1" filter="url(#shadow)"/>
+    <rect x="1058" y="820" width="318" height="28" rx="10" fill="url(#g-st)"/>
+    <rect x="1058" y="838" width="318" height="10" fill="url(#g-st)"/>
+    <text x="1217" y="839" text-anchor="middle" font-size="13" font-weight="700" fill="#ffffff">raft  强一致模式</text>
+    <text x="1070" y="872" font-size="10.5" fill="#475569">▸ 基于 SOFA JRaft</text>
+    <text x="1070" y="890" font-size="10.5" fill="#475569">▸ 多节点强一致复制</text>
+    <text x="1070" y="908" font-size="10.5" fill="#475569">▸ 选主 + 日志复制</text>
+    <text x="1070" y="926" font-size="10.5" fill="#475569">▸ 无需外部 DB 依赖</text>
+    <rect x="1070" y="942" width="294" height="88" rx="6" fill="#f8fafc" stroke="#e2e8f0" stroke-width="0.8"/>
+    <text x="1217" y="962" text-anchor="middle" font-size="10" font-weight="600" fill="#334155">特性</text>
+    <text x="1217" y="982" text-anchor="middle" font-size="9.5" fill="#64748b">高可用多副本</text>
+    <text x="1217" y="1000" text-anchor="middle" font-size="9.5" fill="#64748b">故障自动选主切换</text>
+    <text x="1217" y="1020" text-anchor="middle" font-size="9.5" fill="#94a3b8">云原生 / 集群部署</text>
+  </g>
+
+  <!-- ============ 图例 (1085-1135) ============ -->
+  <rect x="40" y="1085" width="1360" height="50" rx="10" fill="#ffffff" stroke="#e2e8f0" stroke-width="1"/>
+  <text x="58" y="1108" font-size="11" font-weight="700" fill="#334155">图例</text>
+
+  <rect x="100" y="1100" width="12" height="12" rx="3" fill="url(#g-tm)"/>
+  <text x="118" y="1110" font-size="10" fill="#475569">TM 全局事务管理</text>
+
+  <rect x="230" y="1100" width="12" height="12" rx="3" fill="url(#g-at)"/>
+  <text x="248" y="1110" font-size="10" fill="#475569">AT</text>
+  <rect x="278" y="1100" width="12" height="12" rx="3" fill="url(#g-tcc)"/>
+  <text x="296" y="1110" font-size="10" fill="#475569">TCC</text>
+  <rect x="335" y="1100" width="12" height="12" rx="3" fill="url(#g-xa)"/>
+  <text x="353" y="1110" font-size="10" fill="#475569">XA</text>
+  <rect x="385" y="1100" width="12" height="12" rx="3" fill="url(#g-saga)"/>
+  <text x="403" y="1110" font-size="10" fill="#475569">SAGA</text>
+  <text x="445" y="1110" font-size="10" fill="#94a3b8">（RM 四种模式）</text>
+
+  <rect x="575" y="1100" width="12" height="12" rx="3" fill="url(#g-tc)"/>
+  <text x="593" y="1110" font-size="10" fill="#475569">TC 事务协调器</text>
+
+  <rect x="700" y="1100" width="12" height="12" rx="3" fill="url(#g-ns)"/>
+  <text x="718" y="1110" font-size="10" fill="#475569">NamingServer 命名服务</text>
+
+  <rect x="855" y="1100" width="12" height="12" rx="3" fill="url(#g-st)"/>
+  <text x="873" y="1110" font-size="10" fill="#475569">存储层（file / db / redis / raft）</text>
+
+  <line x1="1075" y1="1106" x2="1115" y2="1106" stroke="#64748b" stroke-width="2" marker-end="url(#arr)"/>
+  <text x="1123" y="1110" font-size="10" fill="#475569">调用 / 持久化</text>
+  <line x1="1215" y1="1106" x2="1255" y2="1106" stroke="#3b82f6" stroke-width="2" stroke-dasharray="5 3" marker-end="url(#arrBlue)"/>
+  <text x="1263" y="1110" font-size="10" fill="#475569">RPC 协议</text>
+
+  <text x="58" y="1128" font-size="9.5" fill="#94a3b8">架构要点：业务应用集成 TM/RM 客户端，通过 Netty RPC 与 TC 交互；NamingServer 负责 TC 服务发现与 vGroup 路由；TC 协调全局事务，并按所选存储模式持久化会话/锁状态。</text>
+</svg>
